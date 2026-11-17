@@ -44,7 +44,8 @@ jobs:
 
       # 90-virtual embeds PTX only, which the simulator runs. The simulator
       # needs a shared CUDA runtime (the legacy find_package(CUDA) is told so
-      # with CUDA_USE_STATIC_CUDA_RUNTIME=OFF).
+      # with CUDA_USE_STATIC_CUDA_RUNTIME=OFF). The project sets C++14 for CUDA,
+      # but the thrust in CUDA 13 needs C++17, hence CMAKE_CUDA_STANDARD=17.
       - name: Configure
         run: |
           cmake -S . -B build \
@@ -52,6 +53,7 @@ jobs:
             -DCMAKE_CUDA_ARCHITECTURES=90-virtual \
             -DCMAKE_CUDA_RUNTIME_LIBRARY=Shared \
             -DCUDA_USE_STATIC_CUDA_RUNTIME=OFF \
+            -DCMAKE_CUDA_STANDARD=17 \
             -DBUILD_TESTS=ON
 
       - name: Build
